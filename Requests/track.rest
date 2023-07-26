@@ -1,0 +1,32 @@
+GET http://localhost:4000/track
+###
+GET http://localhost:4000/track/100b509d-9702-4ace-9bde-f509e38023b6
+###
+
+POST http://localhost:4000/track
+Content-Type: application/json
+
+{
+   "name": "Bohemian Rhapsody",
+  "artistId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "duration": 355,
+  "albumId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+
+###
+PUT http://localhost:4000/track/471afc92-e6ae-4544-9308-99fb7e727d4
+Content-Type: application/json
+
+{
+  "name": "----------",
+  "artistId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "duration": 000,
+  "albumId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+
+###
+
+DELETE  http://localhost:4000/track/315c88ac-2cff-4d7f-8400-c6ff7b45ed45
+Content-Type: application/json
+
+###

@@ -22,7 +22,6 @@ export class ArtistController {
 
   @Post()
   create(@Body() createArtistDto: CreateArtistDto) {
-    console.log('createArtistDto1', createArtistDto);
     return this.artistService.create(createArtistDto);
   }
 

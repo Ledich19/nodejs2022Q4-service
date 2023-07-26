@@ -34,7 +34,6 @@ export class ArtistService {
 
   update(id: string, updateArtistDto: UpdateArtistDto) {
     const artist = artistDb.get(id);
-    console.log('...artist, ...updateUserDto', id, artist, updateArtistDto);
     if (!artist) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
