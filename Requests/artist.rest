@@ -1,0 +1,26 @@
+GET http://localhost:4000/artist
+
+###
+POST http://localhost:4000/artist
+Content-Type: application/json
+
+{
+  "name": "string",
+  "grammy": true
+}
+
+###
+PUT http://localhost:4000/artist/471afc92-e6ae-4544-9308-99fb7e727d4
+Content-Type: application/json
+
+{
+  "name": "------",
+  "grammy": true
+}
+
+###
+
+DELETE  http://localhost:4000/artist/8a7fa361-4771-47a0-84bb-ebaecfc7434d
+Content-Type: application/json
+
+###
