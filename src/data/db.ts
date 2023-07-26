@@ -1,3 +1,5 @@
+import { usersRoutes } from 'test/endpoints';
+import { v4 as uuidv4 } from 'uuid';
 import { InMemoryDatabase } from './dbClass';
 import { Album, Artist, Favorites, Track, User } from './dbTypes';
 
@@ -6,3 +8,14 @@ export const artistDb = new InMemoryDatabase<Artist>();
 export const trackDb = new InMemoryDatabase<Track>();
 export const albumDb = new InMemoryDatabase<Album>();
 export const favoriteDb = new InMemoryDatabase<Favorites>();
+
+// const id = uuidv4();
+// userDb.insert(id, {
+//   id: id,
+//   login: 'test',
+//   password: 'test',
+//   version: 1,
+//   createdAt: 123,
+//   updatedAt: 321,
+// });
+// console.log(userDb.showAll());

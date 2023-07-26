@@ -1,19 +1,19 @@
 export class InMemoryDatabase<T> {
-  private data: Record<number, T>;
+  private data: Record<string, T>;
   constructor() {
     this.data = {};
   }
 
-  insert(key: number, value: T): T {
+  insert(key: string, value: T): T {
     this.data[key] = value;
     return value;
   }
 
-  get(key: number): T | null {
+  get(key: string): T | null {
     return this.data[key] || null;
   }
 
-  delete(key: number): boolean {
+  delete(key: string): boolean {
     if (key in this.data) {
       delete this.data[key];
       return true;

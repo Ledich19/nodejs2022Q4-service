@@ -1,34 +1,64 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  ParseUUIDPipe,
+  HttpException,
+  HttpStatus,
+  HttpCode,
+  UseInterceptors,
+} from '@nestjs/common';
+
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ExcludePasswordInterceptor } from './user.interceptor';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @Post()
+  @UseInterceptors(ExcludePasswordInterceptor)
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    const user = this.userService.create(createUserDto);
+    return user;
   }
 
   @Get()
+  @UseInterceptors(ExcludePasswordInterceptor)
   findAll() {
-    return this.userService.findAll();
+    const users = this.userService.findAll();
+    return users;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @UseInterceptors(ExcludePasswordInterceptor)
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    const user = this.userService.findOne(id);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Put(':id')
+  @UseInterceptors(ExcludePasswordInterceptor)
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const userUpdated = this.userService.update(id, updateUserDto);
+    return userUpdated;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    this.userService.remove(id);
+    return;
   }
 }
