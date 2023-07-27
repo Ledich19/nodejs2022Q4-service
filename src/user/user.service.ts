@@ -1,8 +1,7 @@
 import {
   Injectable,
   NotFoundException,
-  HttpException,
-  HttpStatus,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -26,14 +25,13 @@ export class UserService {
   }
 
   findAll() {
-    console.log(userDb.showAll());
     return userDb.showAll();
   }
 
   findOne(id: string) {
     const user = userDb.get(id);
     if (!user) {
-      new NotFoundException('User not found');
+      throw new NotFoundException('User not found');
     }
     return user;
   }
@@ -41,10 +39,10 @@ export class UserService {
   update(id: string, updateUserDto: UpdateUserDto) {
     const user = userDb.get(id);
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     if (user.password !== updateUserDto.oldPassword) {
-      throw new HttpException('User not found', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('oldPassword is wrong');
     }
     return userDb.insert(id, {
       ...user,

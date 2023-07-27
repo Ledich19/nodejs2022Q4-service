@@ -3,15 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Put,
   Param,
   Delete,
   ParseUUIDPipe,
-  HttpException,
   HttpStatus,
   HttpCode,
-  NotFoundException,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';

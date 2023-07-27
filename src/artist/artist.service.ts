@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { albumDb, artistDb, trackDb } from 'src/data/db';
@@ -13,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class ArtistService {
   create(CreateArtistDto: CreateArtistDto) {
     const id = uuidv4();
-    console.log('CreateArtistDto-2', CreateArtistDto);
     return artistDb.insert(id, {
       ...CreateArtistDto,
       id,
@@ -35,7 +29,7 @@ export class ArtistService {
   update(id: string, updateArtistDto: UpdateArtistDto) {
     const artist = artistDb.get(id);
     if (!artist) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('	Artist was not found.');
     }
 
     return artistDb.insert(id, { ...artist, ...updateArtistDto });
@@ -44,7 +38,7 @@ export class ArtistService {
   remove(id: string) {
     const deletedArtist = artistDb.get(id);
     if (!deletedArtist) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('	Artist was not found.');
     }
 
     albumDb.showAll().forEach((album) => {

@@ -7,7 +7,6 @@ import {
   Delete,
   Put,
   ParseUUIDPipe,
-  HttpException,
   HttpStatus,
   HttpCode,
   UseInterceptors,
@@ -39,9 +38,6 @@ export class UserController {
   @UseInterceptors(ExcludePasswordInterceptor)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     const user = this.userService.findOne(id);
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
     return user;
   }
 
