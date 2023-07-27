@@ -25,7 +25,6 @@ export class TrackService {
 
   findOne(id: string) {
     const track = trackDb.get(id);
-    console.log('track ----------', track);
 
     if (!track) {
       throw new NotFoundException('Track was not found.');
