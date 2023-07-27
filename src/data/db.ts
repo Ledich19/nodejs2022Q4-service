@@ -7,15 +7,4 @@ export const userDb = new InMemoryDatabase<User>();
 export const artistDb = new InMemoryDatabase<Artist>();
 export const trackDb = new InMemoryDatabase<Track>();
 export const albumDb = new InMemoryDatabase<Album>();
-export const favoriteDb = new InMemoryDatabase<Favorites>();
-
-// const id = uuidv4();
-// userDb.insert(id, {
-//   id: id,
-//   login: 'test',
-//   password: 'test',
-//   version: 1,
-//   createdAt: 123,
-//   updatedAt: 321,
-// });
-// console.log(userDb.showAll());
+export const favoriteDb = new InMemoryDatabase<string[]>();
