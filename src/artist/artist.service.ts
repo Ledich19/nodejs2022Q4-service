@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { artistDb } from 'src/data/db';
+import { albumDb, artistDb, trackDb } from 'src/data/db';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -46,6 +46,19 @@ export class ArtistService {
     if (!deletedArtist) {
       throw new NotFoundException('User not found');
     }
+
+    albumDb.showAll().forEach((album) => {
+      if (album.artistId === id) {
+        albumDb.insert(album.id, { ...album, artistId: null });
+      }
+    });
+
+    trackDb.showAll().forEach((track) => {
+      if (track.artistId === id) {
+        trackDb.insert(track.id, { ...track, artistId: null });
+      }
+    });
+
     return artistDb.delete(id);
   }
 }
