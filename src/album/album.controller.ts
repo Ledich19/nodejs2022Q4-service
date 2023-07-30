@@ -3,20 +3,19 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Put,
   Param,
   Delete,
   ParseUUIDPipe,
-  HttpException,
   HttpStatus,
   HttpCode,
-  NotFoundException,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Album')
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
