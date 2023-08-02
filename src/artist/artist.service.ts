@@ -53,20 +53,19 @@ export class ArtistService {
         },
       });
 
-      await this.prisma.album.updateMany({
-        where: {
-          artistId: id,
-        },
-        data: { artistId: null },
-      });
+      // await this.prisma.album.updateMany({
+      //   where: {
+      //     artistId: id,
+      //   },
+      //   data: { artistId: null },
+      // });
 
-      await this.prisma.track.updateMany({
-        where: {
-          artistId: id,
-        },
-        data: { artistId: null },
-      });
-
+      // await this.prisma.track.updateMany({
+      //   where: {
+      //     artistId: id,
+      //   },
+      //   data: { artistId: null },
+      // });
       return { message: 'Artist deleted successfully' };
     } catch (error) {
       console.log(error);
