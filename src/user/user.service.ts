@@ -7,7 +7,6 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { log } from 'console';
 
 try {
 } catch (error) {
@@ -50,12 +49,11 @@ export class UserService {
         id,
       },
     });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    if (user.password !== updateUserDto.oldPassword) {
+
+    if (!user) throw new NotFoundException('User not found');
+    if (user.password !== updateUserDto.oldPassword)
       throw new ForbiddenException('oldPassword is wrong');
-    }
+
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {
@@ -69,11 +67,15 @@ export class UserService {
   }
 
   async remove(id: string) {
-    await this.prisma.user.delete({
-      where: {
-        id,
-      },
-    });
-    return { message: 'User deleted successfully' };
+    try {
+      await this.prisma.user.delete({
+        where: {
+          id,
+        },
+      });
+      return { message: 'User deleted successfully' };
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException('User not found');
+    }
   }
 }

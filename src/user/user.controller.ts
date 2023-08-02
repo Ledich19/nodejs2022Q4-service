@@ -11,9 +11,6 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
-  InternalServerErrorException,
-  NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -40,12 +37,8 @@ export class UserController {
     description: 'Bad request. body does not contain required fields',
   })
   async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-    try {
-      const user = await this.userService.create(createUserDto);
-      return new UserEntity(user);
-    } catch (error) {
-      throw new InternalServerErrorException('Error fetching users');
-    }
+    const user = await this.userService.create(createUserDto);
+    return new UserEntity(user);
   }
 
   @Get()
@@ -61,12 +54,8 @@ export class UserController {
     },
   })
   async findAll(): Promise<UserEntity[]> {
-    try {
-      const users = await this.userService.findAll();
-      return users.map((user) => new UserEntity(user));
-    } catch (error) {
-      throw new InternalServerErrorException('Error create user:');
-    }
+    const users = await this.userService.findAll();
+    return users.map((user) => new UserEntity(user));
   }
 
   @Get(':id')
@@ -86,13 +75,8 @@ export class UserController {
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
-    try {
-      const user = await this.userService.findOne(id);
-      return new UserEntity(user);
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      throw new InternalServerErrorException('Error deleting user:');
-    }
+    const user = await this.userService.findOne(id);
+    return new UserEntity(user);
   }
 
   @Put(':id')
@@ -117,14 +101,8 @@ export class UserController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
-    try {
-      const userUpdated = await this.userService.update(id, updateUserDto);
-      return new UserEntity(userUpdated);
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      if (error instanceof ForbiddenException) throw error;
-      throw new InternalServerErrorException('Error deleting user:');
-    }
+    const userUpdated = await this.userService.update(id, updateUserDto);
+    return new UserEntity(userUpdated);
   }
 
   @Delete(':id')
@@ -138,15 +116,7 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-    try {
-      await this.userService.remove(id);
-      return;
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('User not found');
-      } else {
-        throw new InternalServerErrorException('Error deleting user:');
-      }
-    }
+    await this.userService.remove(id);
+    return;
   }
 }
