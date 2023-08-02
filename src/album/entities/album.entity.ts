@@ -1,6 +1,16 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+} from 'class-validator';
 
 export class Album {
+  @IsUUID()
+  @IsNotEmpty()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   name: string;
