@@ -126,8 +126,8 @@ export class TrackController {
   })
   @ApiResponse({ status: 404, description: 'Track was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    this.trackService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    await this.trackService.remove(id);
     return;
   }
 }

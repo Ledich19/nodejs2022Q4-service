@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { v4 as uuidv4 } from 'uuid';
-import { albumDb, trackDb } from 'src/data/db';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -43,12 +41,6 @@ export class AlbumService {
       if (error.code === 'P2025')
         throw new NotFoundException('Album was not found.');
     }
-
-    // const album = albumDb.get(id);
-    // if (!album) {
-    //   throw new NotFoundException('Album was not found.');
-    // }
-    // return albumDb.insert(id, { ...album, ...updateAlbumDto });
   }
 
   async remove(id: string) {
@@ -72,16 +64,5 @@ export class AlbumService {
       if (error.code === 'P2025')
         throw new NotFoundException('Album was not found');
     }
-
-    // const album = albumDb.get(id);
-    // if (!album) {
-    //   throw new NotFoundException('Album was not found.');
-    // }
-    // trackDb.showAll().forEach((track) => {
-    //   if (track.albumId === id) {
-    //     trackDb.insert(track.id, { ...track, albumId: null });
-    //   }
-    // });
-    // return albumDb.delete(id);
   }
 }
