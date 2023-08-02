@@ -71,9 +71,6 @@ export class ArtistController {
   @ApiResponse({ status: 404, description: 'Artist was not found.' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     const artist = this.artistService.findOne(id);
-    if (!artist) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
-    }
     return artist;
   }
 
@@ -124,8 +121,8 @@ export class ArtistController {
   })
   @ApiResponse({ status: 404, description: 'Artist was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    this.artistService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    await this.artistService.remove(id);
     return;
   }
 }
