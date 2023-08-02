@@ -10,6 +10,7 @@ import {
   HttpStatus,
   HttpCode,
   UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -17,13 +18,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ExcludePasswordInterceptor } from './user.interceptor';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()
+  @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Create user', description: 'Creates a new user' })
   @ApiResponse({
     status: 201,
@@ -34,13 +36,13 @@ export class UserController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
-  @UseInterceptors(ExcludePasswordInterceptor)
-  create(@Body() createUserDto: CreateUserDto) {
-    const user = this.userService.create(createUserDto);
-    return user;
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = await this.userService.create(createUserDto);
+    return new UserEntity(user);
   }
 
   @Get()
+  @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Get all users', description: 'Gets all users' })
   @ApiResponse({
     status: 200,
@@ -51,30 +53,34 @@ export class UserController {
       },
     },
   })
-  @UseInterceptors(ExcludePasswordInterceptor)
-  findAll() {
-    const users = this.userService.findAll();
-    return users;
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.userService.findAll();
+    return users.map((user) => new UserEntity(user));
   }
 
   @Get(':id')
+  @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({
     summary: 'Get single user by id',
     description: 'Get single user by id',
   })
-  @ApiResponse({ status: 200, description: 'Successful operation', type: User })
+  @ApiResponse({
+    status: 200,
+    description: 'Successful operation',
+    type: UserEntity,
+  })
   @ApiResponse({
     status: 400,
     description: 'Bad request. userId is invalid (not uuid)',
   })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @UseInterceptors(ExcludePasswordInterceptor)
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const user = this.userService.findOne(id);
-    return user;
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
+    const user = await this.userService.findOne(id);
+    return new UserEntity(user);
   }
 
   @Put(':id')
+  @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({
     summary: "Update a user's password",
     description: "Updates a user's password by ID",
@@ -83,7 +89,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been updated.',
-    type: User,
+    type: UserEntity,
   })
   @ApiResponse({
     status: 400,
@@ -91,13 +97,12 @@ export class UserController {
   })
   @ApiResponse({ status: 403, description: 'oldPassword is wrong' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @UseInterceptors(ExcludePasswordInterceptor)
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
-    const userUpdated = this.userService.update(id, updateUserDto);
-    return userUpdated;
+  ): Promise<UserEntity> {
+    const userUpdated = await this.userService.update(id, updateUserDto);
+    return new UserEntity(userUpdated);
   }
 
   @Delete(':id')
@@ -110,8 +115,8 @@ export class UserController {
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    this.userService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    await this.userService.remove(id);
     return;
   }
 }

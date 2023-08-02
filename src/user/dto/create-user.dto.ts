@@ -8,10 +8,4 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
-  version: number;
-
-  createdAt: number;
-
-  updatedAt: number;
 }
