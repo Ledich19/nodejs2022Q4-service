@@ -23,8 +23,8 @@ export class FavsController {
     description: 'Gets all favorites movies, tracks and books',
   })
   @ApiResponse({ status: 200, description: 'Successful operation', type: Fav })
-  findAll() {
-    return this.favsService.findAll();
+  async findAll() {
+    return await this.favsService.findAll();
   }
 
   @Post('track/:id')
@@ -44,8 +44,8 @@ export class FavsController {
     description: 'Bad. trackId is invalid (not uuid)',
   })
   @ApiResponse({ status: 422, description: "Track with id doesn't exist." })
-  createTrack(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favsService.create('tracks', id);
+  async createTrack(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.favsService.create('tracks', id);
   }
 
   @Delete('track/:id')
@@ -66,8 +66,8 @@ export class FavsController {
   })
   @ApiResponse({ status: 404, description: 'Track was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeTrack(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.remove('tracks', id);
+  async removeTrack(@Param('id', ParseUUIDPipe) id: string) {
+    await this.favsService.remove('tracks', id);
     return;
   }
 
@@ -88,8 +88,8 @@ export class FavsController {
     description: 'Bad. albumId is invalid (not uuid)',
   })
   @ApiResponse({ status: 422, description: "Album with id doesn't exist." })
-  createAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favsService.create('albums', id);
+  async createAlbum(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.favsService.create('albums', id);
   }
 
   @Delete('album/:id')
@@ -110,8 +110,8 @@ export class FavsController {
   })
   @ApiResponse({ status: 404, description: 'Album was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.remove('albums', id);
+  async removeAlbum(@Param('id', ParseUUIDPipe) id: string) {
+    await this.favsService.remove('albums', id);
     return;
   }
 
@@ -132,8 +132,8 @@ export class FavsController {
     description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({ status: 422, description: "Artist with id doesn't exist." })
-  createArtist(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favsService.create('artists', id);
+  async createArtist(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.favsService.create('artists', id);
   }
 
   @Delete('artist/:id')
@@ -154,8 +154,8 @@ export class FavsController {
   })
   @ApiResponse({ status: 404, description: 'Artist was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeArtist(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.remove('artists', id);
+  async removeArtist(@Param('id', ParseUUIDPipe) id: string) {
+    await this.favsService.remove('artists', id);
     return;
   }
 }

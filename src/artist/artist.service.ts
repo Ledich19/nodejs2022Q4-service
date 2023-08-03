@@ -53,43 +53,11 @@ export class ArtistService {
         },
       });
 
-      // await this.prisma.album.updateMany({
-      //   where: {
-      //     artistId: id,
-      //   },
-      //   data: { artistId: null },
-      // });
-
-      // await this.prisma.track.updateMany({
-      //   where: {
-      //     artistId: id,
-      //   },
-      //   data: { artistId: null },
-      // });
       return { message: 'Artist deleted successfully' };
     } catch (error) {
       console.log(error);
       if (error.code === 'P2025')
         throw new NotFoundException('Artist not found');
     }
-
-    // const deletedArtist = artistDb.get(id);
-    // if (!deletedArtist) {
-    //   throw new NotFoundException('	Artist was not found.');
-    // }
-
-    // albumDb.showAll().forEach((album) => {
-    //   if (album.artistId === id) {
-    //     albumDb.insert(album.id, { ...album, artistId: null });
-    //   }
-    // });
-
-    // trackDb.showAll().forEach((track) => {
-    //   if (track.artistId === id) {
-    //     trackDb.insert(track.id, { ...track, artistId: null });
-    //   }
-    // });
-
-    // return artistDb.delete(id);
   }
 }

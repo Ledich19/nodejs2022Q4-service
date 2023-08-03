@@ -51,13 +51,6 @@ export class AlbumService {
         },
       });
 
-      await this.prisma.track.updateMany({
-        where: {
-          albumId: id,
-        },
-        data: { albumId: null },
-      });
-
       return { message: 'Album deleted successfully' };
     } catch (error) {
       console.log(error);

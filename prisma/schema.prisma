@@ -51,18 +51,18 @@ model Track {
 
 model FavoritesArtists {
   id      Int @id @default(autoincrement())
-  artist  Artist @relation(fields: [artistId], references: [id])
-  artistId String @unique
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId String? @unique
 }
 
 model FavoritesAlbums {
   id      Int @id @default(autoincrement())
-  album   Album @relation(fields: [albumId], references: [id])
-  albumId String @unique
+  album   Album? @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId String? @unique
 }
 
 model FavoritesTracks {
   id      Int @id @default(autoincrement())
-  track   Track @relation(fields: [trackId], references: [id])
-  trackId String @unique
+  track   Track? @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  trackId String? @unique
 }

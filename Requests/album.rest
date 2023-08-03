@@ -1,0 +1,5 @@
+
+DELETE  http://localhost:4000/album/b2f81739-bc2f-4684-bd63-d2c99ed7e1bc
+Content-Type: application/json
+
+###

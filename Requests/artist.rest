@@ -4,7 +4,7 @@ GET http://localhost:4000/artist
 GET http://localhost:4000/artist/b4fbb22c-4a68-4fb6-99a8-039c34708fdf
 
 ###
-POST http://localhost:4000/artist/48dec963-a7bd-4269-bb8e-048b3c312365
+POST http://localhost:4000/artist
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ###
 
-DELETE  http://localhost:4000/artist/b4fbb22c-4a68-4fb6-99a8-039c34708fdf
+DELETE  http://localhost:4000/artist/61913cda-b329-4c31-8dbd-941c9ce15307
 Content-Type: application/json
 
 ###
