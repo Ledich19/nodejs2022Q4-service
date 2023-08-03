@@ -55,7 +55,6 @@ export class ArtistService {
 
       return { message: 'Artist deleted successfully' };
     } catch (error) {
-      console.log(error);
       if (error.code === 'P2025')
         throw new NotFoundException('Artist not found');
     }

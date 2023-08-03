@@ -53,7 +53,6 @@ export class AlbumService {
 
       return { message: 'Album deleted successfully' };
     } catch (error) {
-      console.log(error);
       if (error.code === 'P2025')
         throw new NotFoundException('Album was not found');
     }
