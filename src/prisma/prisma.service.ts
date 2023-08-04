@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class PrismaService extends PrismaClient {
@@ -7,7 +9,7 @@ export class PrismaService extends PrismaClient {
     super({
       datasources: {
         db: {
-          url: 'postgres://postgres:123@localhost:5432/nestjs',
+          url: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@localhost:${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
         },
       },
     });

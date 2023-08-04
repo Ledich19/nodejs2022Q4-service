@@ -2,11 +2,11 @@ services:
   dev-db:
     image: postgres
     ports:
-      - '5432:5432'
+      - ${POSTGRES_HOST}:${POSTGRES_HOST}
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nestjs
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - postgres
 networks:
