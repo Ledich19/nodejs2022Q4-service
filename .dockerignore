@@ -5,4 +5,3 @@ Dockerfile
 .git
 
 /pg_data
-pg_data
