@@ -3,7 +3,7 @@ services:
     image: postgres:alpine
     restart: always
     ports:
-      - ${POSTGRES_HOST}:${POSTGRES_HOST}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -14,7 +14,9 @@ services:
       - ./pg_data:/var/lib/postgresql/data
 
   server:
-    build: .
+    build:
+      dockerfile: Dockerfile
+      context: .
     restart: always
     depends_on:
       - dev-db
@@ -22,6 +24,8 @@ services:
       - ${PORT}:${PORT}
     networks:
       - postgres
+    # environment:
+      # DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@dev-db:5432/${POSTGRES_DB}?schema=public
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

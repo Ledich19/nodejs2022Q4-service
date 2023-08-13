@@ -9,7 +9,8 @@ export class PrismaService extends PrismaClient {
     super({
       datasources: {
         db: {
-          url: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@localhost:${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
+          //url: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
+          url: 'postgres://postgres:123@dev-db:5432/nestjs',
         },
       },
     });
