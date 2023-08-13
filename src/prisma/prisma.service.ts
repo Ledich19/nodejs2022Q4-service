@@ -3,14 +3,21 @@ import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+  POSTGRES_DB,
+} = process.env;
+
 @Injectable()
 export class PrismaService extends PrismaClient {
   constructor() {
     super({
       datasources: {
         db: {
-          //url: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
-          url: 'postgres://postgres:123@dev-db:5432/nestjs',
+          url: `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`,
         },
       },
     });
