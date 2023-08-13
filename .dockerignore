@@ -1,7 +1,8 @@
 /dist
 /node_modules
+/Requests
+/pg_data
 
 Dockerfile
 .git
 
-/pg_data

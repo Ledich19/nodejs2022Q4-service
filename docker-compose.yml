@@ -1,6 +1,9 @@
 services:
   dev-db:
     image: postgres:alpine
+    build:
+      dockerfile: db.Dockerfile
+      context: .
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}

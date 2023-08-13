@@ -54,6 +54,18 @@ For more information, visit: https://code.visualstudio.com/docs/editor/debugging
 
 ## Docker-Compose
 - Docker - [Download & Install Docker](https://www.docker.com/).
+- [link to repository](https://hub.docker.com/repository/docker/ledich/nodejs2023q2/general)
+
+```bash
+# download image
+docker pull ledich/nodejs2023q2:latest  
+```
+```bash
+# check image
+npm run scout
+```
+
+
 
 ```bash
 
@@ -78,4 +90,4 @@ docker-compose stop
 
 Когда вы создаете свой образ, вам не обязательно создавать весь Dockerfile, включая все этапы. Вы можете указать целевую стадию сборки. Следующая команда предполагает, что вы используете предыдущую Dockerfile, но останавливается на этапе с именем builder:
 
- docker build --target builder -t alexellis2/href-counter:latest .
+docker build --target builder -t alexellis2/href-counter:latest .
