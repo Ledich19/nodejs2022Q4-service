@@ -1,15 +1,10 @@
-/dist
-dist
-/node_modules
-node_modules
-/Requests
-Requests
-/pg_data
-pg_data
 
+dist
+node_modules
+Requests
+pg_data
 Dockerfile
 .git
-/.git
-/doc
 doc
+volumes
 
