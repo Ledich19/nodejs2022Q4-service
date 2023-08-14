@@ -61,18 +61,9 @@ export class FavsService {
     });
 
     return {
-      artists:
-        artists.length === 1
-          ? artists[0].artist
-          : artists.map((artist) => artist.artist),
-      albums:
-        albums.length === 1
-          ? albums[0].album
-          : albums.map((album) => album.album),
-      tracks:
-        tracks.length === 1
-          ? tracks[0].track
-          : tracks.map((track) => track.track),
+      artists: artists.map((artist) => artist.artist),
+      albums: albums.map((album) => album.album),
+      tracks: tracks.map((track) => track.track),
     };
   }
 

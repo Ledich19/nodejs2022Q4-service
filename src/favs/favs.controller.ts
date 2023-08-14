@@ -24,7 +24,8 @@ export class FavsController {
   })
   @ApiResponse({ status: 200, description: 'Successful operation', type: Fav })
   async findAll() {
-    return await this.favsService.findAll();
+    const users = await this.favsService.findAll();
+    return users;
   }
 
   @Post('track/:id')
