@@ -55,7 +55,9 @@ export class UserController {
   })
   async findAll(): Promise<UserEntity[]> {
     const users = await this.userService.findAll();
-    return users.map((user) => new UserEntity(user));
+    return Array.isArray(users)
+      ? users.map((user) => new UserEntity(user))
+      : users;
   }
 
   @Get(':id')
