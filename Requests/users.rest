@@ -14,6 +14,17 @@ Content-Type: application/json
 
 ###
 
+
+PUT http://localhost:4000/user/ba48dbac-6679-4db1-b290-5eb61591eac7
+Content-Type: application/json
+
+{
+  "oldPassword":"string",
+  "newPassword": "string2"
+}
+
+###
+
 DELETE  http://localhost:4000/user/8a7fa361-4771-47a0-84bb-ebaecfc7434d
 Content-Type: application/json
 
