@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prisma:deploy": "prisma migrate deploy",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "scan": "docker scan server",
@@ -38,8 +39,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "swagger-ui-express": "^5.0.0",
-    "uuid": "^8.3.2"
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -51,7 +51,6 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
-    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "cross-env": "^7.0.3",
