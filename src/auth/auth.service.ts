@@ -63,14 +63,11 @@ export class AuthService {
     if (!isCompare) throw new ForbiddenException('Credentials incorrect');
 
     return {
-      access_token: await this.signToken(user.id, user.login),
+      accessToken: await this.signToken(user.id, user.login),
       //refresh_token: await this.jwtService.signAsync(payload),
     };
   }
-  async signToken(
-    id: string,
-    login: string,
-  ): Promise<{ access_token: string }> {
+  async signToken(id: string, login: string): Promise<string> {
     const payload = { sub: id, login };
     console.log(
       'JWT',
@@ -82,8 +79,6 @@ export class AuthService {
       expiresIn: process.env.TOKEN_EXPIRE_TIME,
     });
 
-    return {
-      access_token: token,
-    };
+    return token;
   }
 }

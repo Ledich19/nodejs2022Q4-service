@@ -24,6 +24,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('User')
 @Controller('user')
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()
@@ -43,7 +44,6 @@ export class UserController {
     return new UserEntity(user);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Get all users', description: 'Gets all users' })

@@ -4,15 +4,17 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzY4ZTJjO
 ###
 POST http://localhost:4000/signup
 Content-Type: application/json
+Accept: application/json
 
 {
-  "login": "strin",
+  "login": "strin1",
   "password": "string"
 }
 
 ###
 POST http://localhost:4000/login
 Content-Type: application/json
+Accept: application/json
 
 {
   "login": "strin",

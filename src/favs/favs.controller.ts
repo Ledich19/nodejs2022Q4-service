@@ -7,11 +7,14 @@ import {
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Fav } from './entities/fav.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('Favs')
 @Controller('favs')
 export class FavsController {
