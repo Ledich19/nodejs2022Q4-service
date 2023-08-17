@@ -11,6 +11,7 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -19,6 +20,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ExcludePasswordInterceptor } from './user.interceptor';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('User')
 @Controller('user')
@@ -41,6 +43,7 @@ export class UserController {
     return new UserEntity(user);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @UseInterceptors(ExcludePasswordInterceptor, ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Get all users', description: 'Gets all users' })
