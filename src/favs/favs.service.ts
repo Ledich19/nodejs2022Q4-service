@@ -68,8 +68,6 @@ export class FavsService {
   }
 
   async remove(key: string, id: string) {
-    console.log('');
-
     if (key === 'artists') {
       try {
         await this.prisma.favoritesArtists.delete({

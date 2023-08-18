@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
-import { JwtStrategy } from 'src/strategy/jwt-strategy';
+import { JwtStrategy } from 'src/strategies/jwt-strategy';
 dotenv.config();
 
 @Module({

@@ -1,8 +1,8 @@
 GET http://localhost:4000/user
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzY4ZTJjOC1hZTMzLTQzN2MtOWJjZi00ZDRlNDg3M2RkMzciLCJsb2dpbiI6InN0cmluIiwiaWF0IjoxNjkyMjczNjQxLCJleHAiOjE2OTIyNzcyNDF9.W_lqVWnyz0ytWxQhqsU1MZgNkPQrXtxa_Sz1NUz8a5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMGUxNjQzOC1kM2MyLTQwYTgtOTAyMy1kOTFlOWIxZGQ0YjMiLCJsb2dpbiI6InN0cmluIiwiaWF0IjoxNjkyMzczMTIwLCJleHAiOjE2OTIzNzY3MjB9.P0eXlsEMr6H80erAz271Qgq_PoM0ytkJIR6Ub72C32I
 
 ###
-POST http://localhost:4000/signup
+POST http://localhost:4000/auth/signup
 Content-Type: application/json
 Accept: application/json
 
@@ -12,13 +12,22 @@ Accept: application/json
 }
 
 ###
-POST http://localhost:4000/login
+POST http://localhost:4000/auth/login
 Content-Type: application/json
 Accept: application/json
 
 {
   "login": "strin",
   "password": "string"
+}
+
+###
+POST http://localhost:4000/auth/refresh
+Content-Type: application/json
+Accept: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDMyYWIwYi1iNTYzLTQwN2ItYWM4OC1mM2I4YzMxZjU0YWQiLCJsb2dpbiI6InN0cmluIiwiaWF0IjoxNjkyMzcyNjc5LCJleHAiOjE2OTI0NTkwNzl9.BS3LvdP1LfM3hq5kG-49_Dpj4-BWW6ilGdMeqYIHMpw"
 }
 
 ###

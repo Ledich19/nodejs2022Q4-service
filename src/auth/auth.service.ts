@@ -5,33 +5,36 @@ import { AuthDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { UUID } from 'crypto';
+import { RefreshDto } from './dto/refresh.dto';
+import { UserModule } from 'src/user/user.module';
+import { UserService } from 'src/user/user.service';
+import { log } from 'console';
 dotenv.config();
 
 @Injectable()
 export class AuthService {
   salt = parseInt(process.env.CRYPT_SALT);
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService, // private usersService: UserService,
+  ) {}
 
-  async getJwtAccessToken(sub: UUID, username: string) {
-    const payload = { sub, username };
-    const accessToken = await this.jwtService.signAsync(payload, {
+  async getJwtAccessToke(id: string, login: string): Promise<string> {
+    const payload = { sub: id, login };
+    const token = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET_KEY,
       expiresIn: process.env.TOKEN_EXPIRE_TIME,
     });
-    return {
-      accessToken,
-    };
+    return token;
   }
 
-  public async getJwtRefreshToken(sub: UUID, username: string) {
-    const payload = { sub, username };
+  public async getJwtRefreshToken(id: string, login: string): Promise<string> {
+    const payload = { sub: id, login };
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET_REFRESH_KEY,
       expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
     });
-    return {
-      refreshToken,
-    };
+    return refreshToken;
   }
 
   async signup(authDto: AuthDto) {
@@ -48,9 +51,7 @@ export class AuthService {
         createdAt: true,
       },
     });
-    return {
-      ...user,
-    };
+    return user;
   }
   async login(loginDto: AuthDto) {
     const user = await this.prisma.user.findFirst({
@@ -63,22 +64,28 @@ export class AuthService {
     if (!isCompare) throw new ForbiddenException('Credentials incorrect');
 
     return {
-      accessToken: await this.signToken(user.id, user.login),
-      //refresh_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.getJwtAccessToke(user.id, user.login),
+      refreshToken: await this.getJwtRefreshToken(user.id, user.login),
     };
   }
-  async signToken(id: string, login: string): Promise<string> {
-    const payload = { sub: id, login };
-    console.log(
-      'JWT',
-      process.env.JWT_SECRET_KEY,
-      process.env.TOKEN_EXPIRE_TIME,
-    );
-    const token = await this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_SECRET_KEY,
-      expiresIn: process.env.TOKEN_EXPIRE_TIME,
-    });
-
-    return token;
+  async refresh(refreshDto: RefreshDto) {
+    const { refreshToken } = refreshDto;
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_SECRET_REFRESH_KEY,
+      });
+      return {
+        accessToken: await this.getJwtAccessToke(
+          decodedToken.id,
+          decodedToken.login,
+        ),
+        refreshToken: await this.getJwtRefreshToken(
+          decodedToken.id,
+          decodedToken.login,
+        ),
+      };
+    } catch (error) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
   }
 }
