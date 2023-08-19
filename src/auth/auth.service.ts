@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  UseInterceptors,
+} from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { AuthDto } from './dto';
@@ -9,6 +13,8 @@ import { RefreshDto } from './dto/refresh.dto';
 import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { log } from 'console';
+import { MyLogger } from 'src/logger/logger.service';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 dotenv.config();
 
 @Injectable()

@@ -1,8 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { RefreshDto } from './dto/refresh.dto';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -16,7 +18,6 @@ export class AuthController {
   @Post('login')
   async signIn(@Body() loginDto: AuthDto) {
     const login = await this.authService.login(loginDto);
-    console.log('LOGIN:::::::::::', login);
     return login;
   }
 
