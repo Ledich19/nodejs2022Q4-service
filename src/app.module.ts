@@ -8,6 +8,8 @@ import { FavsModule } from './favs/favs.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './exceptions/custom-exception.filter';
 
 @Module({
   imports: [

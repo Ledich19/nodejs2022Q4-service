@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { MyLogger } from './logger/logger.service';
+import { HttpExceptionFilter } from './exceptions/custom-exception.filter';
 dotenv.config();
 const port = process.env.PORT || 4000;
 
@@ -25,6 +26,8 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   app.useLogger(new MyLogger());
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   await app.listen(port, () => {
     console.log('start on PORT ', port);
   });
