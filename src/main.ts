@@ -25,8 +25,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.useLogger(new MyLogger());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  const logger = new MyLogger();
+  app.useLogger(logger);
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   await app.listen(port, () => {
     console.log('start on PORT ', port);

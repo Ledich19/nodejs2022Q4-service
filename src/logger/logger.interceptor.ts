@@ -4,11 +4,13 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
+  HttpException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { MyLogger } from './logger.service';
 import { ModuleRef } from '@nestjs/core';
+
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   constructor(private logger: MyLogger, private moduleRef: ModuleRef) {}
@@ -30,7 +32,6 @@ export class LoggingInterceptor implements NestInterceptor {
       tap(() => {
         const response = context.switchToHttp().getResponse();
         const statusCode = response.statusCode;
-
         this.logger.logResponse(statusCode);
       }),
     );
