@@ -19,8 +19,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 
   catch(exception: any, host: ArgumentsHost) {
-    console.log('IS WORKING');
-
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
@@ -28,12 +26,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message = 'Internal server error custom';
 
     if (exception instanceof HttpException) {
+      this.logger.logResponse(`${exception.getStatus()}  ${exception.message}`);
       status = exception.getStatus();
       message = exception.message || message;
+    } else {
+      this.logger.error(exception, '');
     }
-
-    this.logger.logResponse(status);
-    this.logger.error(exception, '');
     response.status(status).json({
       statusCode: status,
       message: message,

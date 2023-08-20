@@ -1,32 +1,21 @@
-import {
-  Injectable,
-  ForbiddenException,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { AuthDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { UUID } from 'crypto';
+
 import { RefreshDto } from './dto/refresh.dto';
-import { UserModule } from 'src/user/user.module';
-import { UserService } from 'src/user/user.service';
-import { log } from 'console';
-import { MyLogger } from 'src/logger/logger.service';
-import { LoggingInterceptor } from 'src/logger/logger.interceptor';
+
 dotenv.config();
 
 @Injectable()
 export class AuthService {
   salt = parseInt(process.env.CRYPT_SALT);
-  constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService, // private usersService: UserService,
-  ) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
   async getJwtAccessToke(id: string, login: string): Promise<string> {
-    const payload = { sub: id, login };
+    const payload = { sub: id, id, login };
     const token = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET_KEY,
       expiresIn: process.env.TOKEN_EXPIRE_TIME,
@@ -35,7 +24,7 @@ export class AuthService {
   }
 
   public async getJwtRefreshToken(id: string, login: string): Promise<string> {
-    const payload = { sub: id, login };
+    const payload = { sub: id, id, login };
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET_REFRESH_KEY,
       expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,

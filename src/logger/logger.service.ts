@@ -5,7 +5,15 @@ import {
   LoggerService,
 } from '@nestjs/common';
 
-import { appendFile, mkdir, access, stat, rename, readdir } from 'fs/promises';
+import {
+  appendFile,
+  mkdir,
+  access,
+  stat,
+  rename,
+  readdir,
+  writeFile,
+} from 'fs/promises';
 import { dirname, join } from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -33,24 +41,24 @@ export class MyLogger extends ConsoleLogger {
   private async rotateLogFileIfNeeded() {
     try {
       const stats = await stat(this.logFilePath);
-      if (stats.size >= this.maxLogFileSize) {
-        const existingLogFiles = await readdir(this.workDir);
-        const logFiles = existingLogFiles.filter(
-          (file) => file.startsWith('logs_') && file.endsWith('.log'),
-        );
-        const max = Math.max(
-          ...logFiles
-            .map((el) => parseInt(el.substring(5, 7), 10))
-            .filter((value) => !isNaN(value)),
-          0,
-        );
-        const newLogFileName = `logs_${
-          max + 1 < 10 ? `0${max + 1}` : max + 1
-        }.log`;
-        console.log(this.logFilePath, newLogFileName);
-        const newLogFilePath = join(this.workDir, newLogFileName);
-        await rename(this.logFilePath, newLogFilePath);
+      if (stats.size < this.maxLogFileSize) {
+        return;
       }
+      const existingLogFiles = await readdir(this.workDir);
+      const logFiles = existingLogFiles.filter(
+        (file) => file.startsWith('logs_') && file.endsWith('.log'),
+      );
+      const max = Math.max(
+        ...logFiles
+          .map((el) => parseInt(el.substring(5, 7), 10))
+          .filter((value) => !isNaN(value)),
+        0,
+      );
+      const newLogFileName = `logs_${
+        max + 1 < 10 ? `0${max + 1}` : max + 1
+      }.log`;
+      const newLogFilePath = join(this.workDir, newLogFileName);
+      await rename(this.logFilePath, newLogFilePath);
     } catch (error) {
       console.error('Error rotating log file:', error);
     }
@@ -65,12 +73,14 @@ export class MyLogger extends ConsoleLogger {
   }
 
   private async write(sign, data) {
-    await this.rotateLogFileIfNeeded();
     await this.ensureDirectoryExists(this.workDir);
+    await this.rotateLogFileIfNeeded();
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${sign}] ${data}\n`;
-    appendFile(this.logFilePath, logMessage, { encoding: 'utf8', flag: 'a' });
-
+    await appendFile(this.logFilePath, logMessage, {
+      encoding: 'utf8',
+      flag: 'a',
+    });
     if (sign === 'ERROR') {
       const logMessage = `[${timestamp}] ${data}\n`;
       appendFile(join(this.workDir, this.errorFileName), logMessage, {
@@ -110,7 +120,7 @@ export class MyLogger extends ConsoleLogger {
     const stringBody = await JSON.stringify(body);
 
     this.write(
-      'REQ',
+      'REQUEST',
       `URL: ${url}, Method:${method},Query Parameters: ${stringQuery}, Body: ${stringBody}`,
     );
 
@@ -122,8 +132,8 @@ export class MyLogger extends ConsoleLogger {
       )}`,
     );
   }
-  logResponse(statusCode: number) {
-    this.write('RES', `Outgoing response - Status Code: ${statusCode}`);
-    this.log(`Outgoing response - ${blue('Status Code')} ${statusCode}`, '');
+  logResponse(statusCode: string) {
+    this.write('RESPONSE', `Status Code: ${statusCode}`);
+    this.log(`Outgoing response - ${blue('Status Code')} ${statusCode}`);
   }
 }
