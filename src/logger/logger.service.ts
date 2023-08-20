@@ -10,37 +10,34 @@ import { dirname, join } from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-//const filePath = new URL('./files/fileToWrite.txt', import.meta.url);
-
 const blue = (text) => `\x1b[34m${text}:\x1b[32m`;
 const red = (text) => `\x1b[31m${text}:\x1b[32m`;
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class MyLogger extends ConsoleLogger {
   private logFileName: string;
+  private errorFileName: string;
   private logFilePath: string;
+  private workDir: string;
   private maxLogFileSize: number;
 
   constructor() {
     super();
     this.logFileName = 'logs.log';
-    this.logFilePath = join(
-      dirname(this.logFileName),
-      'logs/',
-      this.logFileName,
-    );
-    this.maxLogFileSize = parseInt(process.env.MAX_LOG_SIZE_KB) * 1024; // Максимальный размер файла журнала (10 килобайт)
+    this.errorFileName = 'errors.log';
+    this.workDir = join(dirname(this.logFileName), 'logs/');
+    this.logFilePath = join(this.workDir, this.logFileName);
+    this.maxLogFileSize = parseInt(process.env.MAX_LOG_SIZE_KB) * 1024;
   }
 
   private async rotateLogFileIfNeeded() {
     try {
       const stats = await stat(this.logFilePath);
       if (stats.size >= this.maxLogFileSize) {
-        const existingLogFiles = await readdir(dirname(this.logFilePath));
+        const existingLogFiles = await readdir(this.workDir);
         const logFiles = existingLogFiles.filter(
           (file) => file.startsWith('logs_') && file.endsWith('.log'),
         );
-
         const max = Math.max(
           ...logFiles
             .map((el) => parseInt(el.substring(5, 7), 10))
@@ -51,7 +48,7 @@ export class MyLogger extends ConsoleLogger {
           max + 1 < 10 ? `0${max + 1}` : max + 1
         }.log`;
         console.log(this.logFilePath, newLogFileName);
-        const newLogFilePath = join(dirname(this.logFilePath), newLogFileName);
+        const newLogFilePath = join(this.workDir, newLogFileName);
         await rename(this.logFilePath, newLogFilePath);
       }
     } catch (error) {
@@ -69,15 +66,38 @@ export class MyLogger extends ConsoleLogger {
 
   private async write(sign, data) {
     await this.rotateLogFileIfNeeded();
-    await this.ensureDirectoryExists(dirname(this.logFilePath));
+    await this.ensureDirectoryExists(this.workDir);
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${sign}] ${data}\n`;
     appendFile(this.logFilePath, logMessage, { encoding: 'utf8', flag: 'a' });
+
+    if (sign === 'ERROR') {
+      const logMessage = `[${timestamp}] ${data}\n`;
+      appendFile(join(this.workDir, this.errorFileName), logMessage, {
+        encoding: 'utf8',
+        flag: 'a',
+      });
+    }
   }
 
   async error(message: string, trace: string) {
-    this.write('ERR', message);
+    this.write('ERROR', message);
     super.error(message, trace);
+  }
+
+  warn(message: any, ...optionalParams: any[]) {
+    this.write('WARN', message);
+    super.warn(message, ...optionalParams);
+  }
+
+  debug(message: any, ...optionalParams: any[]) {
+    this.write('DEBUG', message);
+    super.debug(message, ...optionalParams);
+  }
+
+  verbose(message: any, ...optionalParams: any[]) {
+    this.write('VERBOSE', message);
+    super.verbose(message, ...optionalParams);
   }
 
   async logRequest(
