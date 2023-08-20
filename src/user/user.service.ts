@@ -7,13 +7,15 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  salt = parseInt(process.env.CRYPT_SALT);
-  constructor(private prisma: PrismaService) {}
+  salt = this.configService.get('auth.salt');
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const passwordHash = await hash(createUserDto.password, this.salt);

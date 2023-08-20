@@ -7,6 +7,8 @@ import { AlbumModule } from './album/album.module';
 import { FavsModule } from './favs/favs.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerModule } from './logger/logger.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
@@ -18,6 +20,10 @@ import { LoggerModule } from './logger/logger.module';
     FavsModule,
     PrismaModule,
     LoggerModule,
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }),
   ],
 })
 export class AppModule implements NestModule {

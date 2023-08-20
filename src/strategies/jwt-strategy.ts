@@ -2,16 +2,19 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
-import * as dotenv from 'dotenv';
 import { PrismaService } from 'src/prisma/prisma.service';
-dotenv.config();
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private authService: AuthService, private prisma: PrismaService) {
+  constructor(
+    private authService: AuthService,
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET_KEY,
+      secretOrKey: configService.get('auth.jwrAccess'),
     });
   }
   async validate(payload: { sub: string; login: string }) {

@@ -1,22 +1,7 @@
-import {
-  Injectable,
-  Scope,
-  ConsoleLogger,
-  LoggerService,
-} from '@nestjs/common';
-
-import {
-  appendFile,
-  mkdir,
-  access,
-  stat,
-  rename,
-  readdir,
-  writeFile,
-} from 'fs/promises';
+import { Injectable, Scope, ConsoleLogger } from '@nestjs/common';
+import { appendFile, mkdir, access, stat, rename, readdir } from 'fs/promises';
 import { dirname, join } from 'path';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { ConfigService } from '@nestjs/config';
 
 const blue = (text) => `\x1b[34m${text}:\x1b[32m`;
 const red = (text) => `\x1b[31m${text}:\x1b[32m`;
@@ -29,13 +14,13 @@ export class MyLogger extends ConsoleLogger {
   private workDir: string;
   private maxLogFileSize: number;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     super();
     this.logFileName = 'logs.log';
     this.errorFileName = 'errors.log';
     this.workDir = join(dirname(this.logFileName), 'logs/');
     this.logFilePath = join(this.workDir, this.logFileName);
-    this.maxLogFileSize = parseInt(process.env.MAX_LOG_SIZE_KB) * 1024;
+    this.maxLogFileSize = this.configService.get('logs.size') * 1024;
   }
 
   private async rotateLogFileIfNeeded() {
