@@ -2,9 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as dotenv from 'dotenv';
 import { MyLogger } from './logger/logger.service';
 import { HttpExceptionFilter } from './exceptions/custom-exception.filter';
+import * as dotenv from 'dotenv';
 dotenv.config();
 const port = process.env.PORT || 4000;
 

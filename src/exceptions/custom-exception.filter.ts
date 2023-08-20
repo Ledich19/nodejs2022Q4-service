@@ -33,7 +33,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     this.logger.logResponse(status);
-    this.logger.error(exception);
+    this.logger.error(exception, '');
     response.status(status).json({
       statusCode: status,
       message: message,
