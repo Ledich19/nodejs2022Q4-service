@@ -21,7 +21,9 @@ import { ExcludePasswordInterceptor } from './user.interceptor';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @ApiTags('User')
 @Controller('user')
 @UseGuards(AuthGuard('jwt'))

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 import { appendFile, mkdir, access, stat, rename, readdir } from 'fs/promises';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,14 +17,18 @@ const red = (text) => `\x1b[31m${text}:\x1b[32m`;
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class MyLogger extends ConsoleLogger {
+  private logFileName: string;
   private logFilePath: string;
-  private logDir: string;
   private maxLogFileSize: number;
 
   constructor() {
     super();
-    this.logFilePath = 'logs/logs.log'; // Путь к файлу журнала
-    this.logDir = dirname(this.logFilePath);
+    this.logFileName = 'logs.log';
+    this.logFilePath = join(
+      dirname(this.logFileName),
+      'logs/',
+      this.logFileName,
+    );
     this.maxLogFileSize = parseInt(process.env.MAX_LOG_SIZE_KB) * 1024; // Максимальный размер файла журнала (10 килобайт)
   }
 
@@ -32,15 +36,23 @@ export class MyLogger extends ConsoleLogger {
     try {
       const stats = await stat(this.logFilePath);
       if (stats.size >= this.maxLogFileSize) {
-        const existingLogFiles = await readdir(this.logDir);
+        const existingLogFiles = await readdir(dirname(this.logFilePath));
         const logFiles = existingLogFiles.filter(
           (file) => file.startsWith('logs_') && file.endsWith('.log'),
         );
+
         const max = Math.max(
-          ...logFiles.map((el) => parseInt(el.substring(5, 7), 10)),
+          ...logFiles
+            .map((el) => parseInt(el.substring(5, 7), 10))
+            .filter((value) => !isNaN(value)),
+          0,
         );
-        const newLogFileName = `log_${max + 1}.log`;
-        await rename(this.logFilePath, newLogFileName);
+        const newLogFileName = `logs_${
+          max + 1 < 10 ? `0${max + 1}` : max + 1
+        }.log`;
+        console.log(this.logFilePath, newLogFileName);
+        const newLogFilePath = join(dirname(this.logFilePath), newLogFileName);
+        await rename(this.logFilePath, newLogFilePath);
       }
     } catch (error) {
       console.error('Error rotating log file:', error);
@@ -56,7 +68,7 @@ export class MyLogger extends ConsoleLogger {
   }
 
   private async write(sign, data) {
-    this.rotateLogFileIfNeeded();
+    await this.rotateLogFileIfNeeded();
     await this.ensureDirectoryExists(dirname(this.logFilePath));
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${sign}] ${data}\n`;

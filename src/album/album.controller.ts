@@ -10,6 +10,7 @@ import {
   HttpStatus,
   HttpCode,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -17,7 +18,9 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Album } from './entities/album.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Album')
 @Controller('album')

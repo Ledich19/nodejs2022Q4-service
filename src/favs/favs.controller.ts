@@ -8,12 +8,15 @@ import {
   HttpStatus,
   HttpCode,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Fav } from './entities/fav.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Favs')
 @Controller('favs')
