@@ -7,7 +7,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "login": "strin23",
+  "login": "strin1",
   "password": "string"
 }
 
@@ -27,7 +27,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDMyYWIwYi1iNTYzLTQwN2ItYWM4OC1mM2I4YzMxZjU0YWQiLCJsb2dpbiI6InN0cmluIiwiaWF0IjoxNjkyMzcyNjc5LCJleHAiOjE2OTI0NTkwNzl9.BS3LvdP1LfM3hq5kG-49_Dpj4-BWW6ilGdMeqYIHMpw"
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NGU4ZmI0OS05Zjc0LTQwOWUtYmZlMS1kODhkMThjZDdjNjgiLCJpZCI6Ijg0ZThmYjQ5LTlmNzQtNDA5ZS1iZmUxLWQ4OGQxOGNkN2M2OCIsImxvZ2luIjoic3RyaW4xIiwiaWF0IjoxNjkyNjQ4MjAzLCJleHAiOjE2OTI3MzQ2MDN9.U9NsD24VZC0WvtuV1Kjt4SSLdqIY3QOIeXEormEEj48"
 }
 
 ###

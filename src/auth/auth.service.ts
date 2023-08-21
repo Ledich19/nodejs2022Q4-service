@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  salt = parseInt(process.env.CRYPT_SALT);
+  salt = this.configService.get('auth.salt');
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -59,9 +59,20 @@ export class AuthService {
     const isCompare = await compare(loginDto.password, user.passwordHash);
     if (!isCompare) throw new ForbiddenException('Credentials incorrect');
 
+    const accessToken = await this.getJwtAccessToke(user.id, user.login);
+    const refreshToken = await this.getJwtRefreshToken(user.id, user.login);
+    const refreshHash = await hash(refreshToken, this.salt);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        refreshHash,
+      },
+    });
+
     return {
-      accessToken: await this.getJwtAccessToke(user.id, user.login),
-      refreshToken: await this.getJwtRefreshToken(user.id, user.login),
+      accessToken,
+      refreshToken,
     };
   }
   async refresh(refreshDto: RefreshDto) {
@@ -70,15 +81,36 @@ export class AuthService {
       const decodedToken = await this.jwtService.verifyAsync(refreshToken, {
         secret: this.configService.get('auth.jwrRefresh'),
       });
+      const user = await this.prisma.user.findFirst({
+        where: {
+          id: decodedToken.id,
+        },
+      });
+      const isValid = await compare(refreshToken, user.refreshHash);
+      if (!isValid) {
+        throw new ForbiddenException('Credentials incorrect');
+      }
+
+      const accessToken = await this.getJwtAccessToke(
+        decodedToken.id,
+        decodedToken.login,
+      );
+      const newRefreshToken = await this.getJwtRefreshToken(
+        decodedToken.id,
+        decodedToken.login,
+      );
+      const refreshHash = await hash(newRefreshToken, this.salt);
+
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          refreshHash,
+        },
+      });
+
       return {
-        accessToken: await this.getJwtAccessToke(
-          decodedToken.id,
-          decodedToken.login,
-        ),
-        refreshToken: await this.getJwtRefreshToken(
-          decodedToken.id,
-          decodedToken.login,
-        ),
+        accessToken,
+        refreshToken: newRefreshToken,
       };
     } catch (error) {
       throw new ForbiddenException('Credentials incorrect');
