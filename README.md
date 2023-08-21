@@ -1,4 +1,5 @@
 # Home Library Service
+if you want run without container, you have to in env file change POSTGRES_HOST to "localhost"
 
 ## Prerequisites
 
