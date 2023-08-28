@@ -1,0 +1,19 @@
+GET http://localhost:4000/favs
+
+###
+
+GET http://localhost:4000/user/100b509d-9702-4ace-9bde-f509e38023b6
+###
+
+POST http://localhost:4000/favs/artist/165a20d4-eaa4-432e-9032-c2437a6bc36a
+Content-Type: application/json
+
+{
+}
+
+###
+
+DELETE  http://localhost:4000/user/8a7fa361-4771-47a0-84bb-ebaecfc7434d
+Content-Type: application/json
+
+###
