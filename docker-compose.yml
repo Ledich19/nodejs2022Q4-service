@@ -1,0 +1,37 @@
+version: "3"
+services:
+  dev-db:
+    image: postgres:alpine
+    build:
+      dockerfile: db.Dockerfile
+      context: .
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - postgres
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+  server:
+    build: .
+    restart: always
+    depends_on:
+      - dev-db
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+networks:
+  postgres:
+    driver: bridge

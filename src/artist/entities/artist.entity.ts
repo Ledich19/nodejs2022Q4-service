@@ -1,6 +1,10 @@
-import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsUUID } from 'class-validator';
 
 export class Artist {
+  @IsUUID()
+  @IsNotEmpty()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
   name: string;

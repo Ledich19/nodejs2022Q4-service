@@ -120,8 +120,8 @@ export class AlbumController {
   })
   @ApiResponse({ status: 404, description: 'Album was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    this.albumService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    await this.albumService.remove(id);
     return;
   }
 }

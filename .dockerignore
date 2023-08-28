@@ -1,0 +1,10 @@
+
+dist
+node_modules
+Requests
+pg_data
+Dockerfile
+.git
+doc
+volumes
+

@@ -7,10 +7,10 @@ POST http://localhost:4000/track
 Content-Type: application/json
 
 {
-   "name": "Bohemian Rhapsody",
-  "artistId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "name": "Bohemiang Rhapsody",
+  "artistId": null,
   "duration": 355,
-  "albumId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  "albumId": null
 }
 
 ###
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ###
 
-DELETE  http://localhost:4000/track/315c88ac-2cff-4d7f-8400-c6ff7b45ed45
+DELETE  http://localhost:4000/track/5216de6f-ceca-4c64-ab57-bd67ae7ba587
 Content-Type: application/json
 
 ###

@@ -1,5 +1,4 @@
 GET http://localhost:4000/user
-
 ###
 
 GET http://localhost:4000/user/100b509d-9702-4ace-9bde-f509e38023b6
@@ -9,7 +8,7 @@ POST http://localhost:4000/user
 Content-Type: application/json
 
 {
-  "login": "string",
+  "login": "strin",
   "password": "string"
 }
 
@@ -17,5 +16,6 @@ Content-Type: application/json
 
 DELETE  http://localhost:4000/user/8a7fa361-4771-47a0-84bb-ebaecfc7434d
 Content-Type: application/json
+
 
 ###
