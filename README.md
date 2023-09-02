@@ -1,4 +1,5 @@
 # Home Library Service
+if you want run without container, you have to in env file change POSTGRES_HOST to "localhost"
 
 ## Prerequisites
 
@@ -87,7 +88,3 @@ docker-compose start
 docker-compose stop
 
 ```
-
-Когда вы создаете свой образ, вам не обязательно создавать весь Dockerfile, включая все этапы. Вы можете указать целевую стадию сборки. Следующая команда предполагает, что вы используете предыдущую Dockerfile, но останавливается на этапе с именем builder:
-
-docker build --target builder -t alexellis2/href-counter:latest .

@@ -9,14 +9,19 @@ import {
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Track } from './entities/track.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('Track')
 @Controller('track')
 export class TrackController {

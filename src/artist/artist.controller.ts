@@ -10,13 +10,20 @@ import {
   HttpException,
   HttpStatus,
   HttpCode,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Artist } from './entities/artist.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
+
+@UseInterceptors(LoggingInterceptor)
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('Artist')
 @Controller('artist')
 export class ArtistController {

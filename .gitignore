@@ -1,4 +1,6 @@
 # compiled output
+/pgconf
+/pglog
 /dist
 /node_modules
 .env

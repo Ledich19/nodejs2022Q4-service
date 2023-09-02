@@ -1,26 +1,28 @@
+import { compare, hash } from 'bcrypt';
 import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-
-try {
-} catch (error) {
-  throw new InternalServerErrorException('Error deleting user:', error.message);
-}
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  salt = this.configService.get('auth.salt');
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
+    const passwordHash = await hash(createUserDto.password, this.salt);
     const user = await this.prisma.user.create({
       data: {
-        ...createUserDto,
+        login: createUserDto.login,
+        passwordHash,
       },
     });
     return {
@@ -49,15 +51,19 @@ export class UserService {
         id,
       },
     });
-
     if (!user) throw new NotFoundException('User not found');
-    if (user.password !== updateUserDto.oldPassword)
-      throw new ForbiddenException('oldPassword is wrong');
 
+    const isCompare = await compare(
+      updateUserDto.oldPassword,
+      user.passwordHash,
+    );
+    if (!isCompare) throw new ForbiddenException('oldPassword is wrong');
+
+    const newPasswordHash = await hash(updateUserDto.newPassword, this.salt);
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {
-        password: updateUserDto.newPassword,
+        passwordHash: newPasswordHash,
         version: {
           increment: 1,
         },

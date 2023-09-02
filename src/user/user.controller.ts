@@ -11,6 +11,7 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -19,9 +20,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ExcludePasswordInterceptor } from './user.interceptor';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @ApiTags('User')
 @Controller('user')
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()

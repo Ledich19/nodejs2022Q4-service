@@ -1,0 +1,33 @@
+GET http://localhost:4000/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZDE4NjY5Ni01ZGJiLTQ0YTUtYmQzZS02OGE4OTQ2ZWQ3Y2EiLCJsb2dpbiI6InN0cmluMSIsImlhdCI6MTY5MjUyNTAzOSwiZXhwIjoxNjkyNTI4NjM5fQ.OGwPLxESc2vVeVKRMYZp0cuweemMRKQ6cJyxIXU7puc
+
+###
+POST http://localhost:4000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "login": "strin1",
+  "password": "string"
+}
+
+###
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "login": "strin1",
+  "password": "string"
+}
+
+###
+POST http://localhost:4000/auth/refresh
+Content-Type: application/json
+Accept: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NGU4ZmI0OS05Zjc0LTQwOWUtYmZlMS1kODhkMThjZDdjNjgiLCJpZCI6Ijg0ZThmYjQ5LTlmNzQtNDA5ZS1iZmUxLWQ4OGQxOGNkN2M2OCIsImxvZ2luIjoic3RyaW4xIiwiaWF0IjoxNjkyNjQ4MjAzLCJleHAiOjE2OTI3MzQ2MDN9.U9NsD24VZC0WvtuV1Kjt4SSLdqIY3QOIeXEormEEj48"
+}
+
+###

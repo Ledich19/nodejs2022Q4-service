@@ -16,6 +16,9 @@ services:
       - postgres
     volumes:
       - ./pg_data:/var/lib/postgresql/data
+      - ./pgconf:/etc/postgresql
+      - ./pglog:/logs
+    command: postgres -c logging_collector=on -c log_destination=stderr -c log_directory=/logs
 
   server:
     build: .

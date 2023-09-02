@@ -11,10 +11,7 @@ export class UserEntity {
   version: number;
 
   @Exclude()
-  passwordHash: string;
-
-  @Exclude()
-  refreshHash: string;
+  password: string;
 
   @Transform(({ value }) => new Date(value).getTime())
   createdAt: number;
@@ -23,7 +20,10 @@ export class UserEntity {
   updatedAt: number;
 
   constructor(
-    partial: Pick<Partial<UserEntity>, 'id' | 'login' | 'version'> & {
+    partial: Pick<
+      Partial<UserEntity>,
+      'id' | 'login' | 'version' | 'password'
+    > & {
       createdAt: Date;
       updatedAt: Date;
     },
